@@ -17,9 +17,9 @@ while True:
                 h, w, c = image.shape
                 cx, cy = int(lm.x * w), int(lm.y * h)
                 if id == 9:
-                    # cv2.circle(image, (cx, cy), 25, (255, 0, 255), cv2.FILLED)
-                    cv2.circle(image, (cx, cy), 0, (255, 0, 255), 500)
+                    cv2.circle(image, (cx, cy), 25, (255, 0, 255), cv2.FILLED)
+                    # cv2.circle(image, (cx, cy), 0, (255, 0, 255), 500)
 
-            # mpDraw.draw_landmarks(image, handLms, mpHands.HAND_CONNECTIONS)
+            mpDraw.draw_landmarks(image, handLms, mpHands.HAND_CONNECTIONS)
     cv2.imshow("Output", image)
     cv2.waitKey(1)
