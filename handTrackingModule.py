@@ -94,8 +94,23 @@ def main():
             print("Pointing up")
             pass
         else: print("no sign detected")
+
+
+        # Window sizing consistency
+        # Get the frame dimensions and calculate the aspect ratio
+        height, width, _ = image.shape
+        aspect_ratio = width / height
+
+        # Set the window size to maintain the aspect ratio
+        window_width = 800  # Set your desired width
+        window_height = int(window_width / aspect_ratio)
+        
+        # Create a resizable window with the calculated size
+        cv2.namedWindow("Video", cv2.WINDOW_NORMAL)
+        cv2.resizeWindow("Video", window_width, window_height)
+
         cv2.imshow("Video",image)
-        cv2.waitKey(4)
+        cv2.waitKey(1)
 
 if __name__ == "__main__":
     main()
