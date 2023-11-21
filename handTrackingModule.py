@@ -38,15 +38,10 @@ class handTracker():
     
 
     def isThumbsUp(self, lmList):
-        # Check to make sure there are 20 points being tracked
         if len(lmList) == 21:
-            # Calculating the distance between the thumb and the index finger
             distance_index_thumb = handTracker.calculate_distance(lmList[4], lmList[8])
-            # Check if the distance is between 100 and 200
             if (distance_index_thumb > 100) and (distance_index_thumb < 200):
-                # Check if the thumb is above the tip of the index finger
                 if lmList[4][2] < lmList[8][2]:
-                    # Check if the thumb is above the tip of the middle finger
                     if lmList[4][2] < lmList[12][2]:
                         return True
         return False
@@ -55,11 +50,25 @@ class handTracker():
         if len(lmList) == 21:
             landmarks = [12, 16, 20]
             average_position = handTracker.calculate_average_position(lmList, landmarks)
-            distance = handTracker.calculate_distance(lmList[8], average_position)
-            if (lmList[8][2] < average_position[2]) and (distance > 300):
+            distance_index_middle = handTracker.calculate_distance(lmList[8], lmList[12])
+            distance_middle_ring = handTracker.calculate_distance(lmList[12], lmList[16])
+            if (distance_index_middle > (distance_middle_ring * 2)) and (lmList[8][2] < average_position[2]) and (lmList[8][2] < lmList[12][2]):
                 return True
-     
         return False
+    
+    def isBird(self, lmList):
+        if len(lmList) == 21:
+            landmarks = [8, 16, 20]
+            average_position = handTracker.calculate_average_position(lmList, landmarks)
+            distance_index_middle = handTracker.calculate_distance(lmList[8], lmList[12])
+            distance_ring_pinky = handTracker.calculate_distance(lmList[16], lmList[20])
+            if (distance_index_middle > (distance_ring_pinky * 2)) and (lmList[12][2] < average_position[2]) and (lmList[12][2] < lmList[8][2]):
+                return True
+        return False
+    
+    def handOrientation(self, lmList):
+        # Function to determine the orientation of the hand
+        pass
     
     @staticmethod
     def calculate_average_position(lmList, landmarks):
@@ -86,16 +95,6 @@ def main():
         success,image = cap.read()
         image = tracker.handsFinder(image)
         lmList = tracker.positionFinder(image)
-        # if len(lmList) != 0:
-        #     print(lmList[4])
-        if tracker.isThumbsUp(lmList):
-            print("Thumb up")
-        elif tracker.isPointingUp(lmList):
-            print("Pointing up")
-            pass
-        else: print("no sign detected")
-
-
         # Window sizing consistency
         # Get the frame dimensions and calculate the aspect ratio
         height, width, _ = image.shape
@@ -109,6 +108,18 @@ def main():
         cv2.namedWindow("Video", cv2.WINDOW_NORMAL)
         cv2.resizeWindow("Video", window_width, window_height)
 
+
+        # Check for symbols
+        if tracker.isThumbsUp(lmList):
+            print("Thumb up")
+        elif tracker.isPointingUp(lmList):
+            print("Pointing up")
+            pass
+        elif (tracker.isBird(lmList)):
+            print("Bird!")
+        else: print("no sign detected")
+
+        # Display updated image
         cv2.imshow("Video",image)
         cv2.waitKey(1)
 
