@@ -39,17 +39,28 @@ while True:
                     (0, 128, 255),
                     (200, 128, 0),
                     (128, 200, 0),
-                    (0, 0, 50)
-                    ]
+                    (0, 0, 50)]
 
                 for i in range(len(colors)):
                     if id == i:
-                        cv2.circle(image, (cx, cy), 25, colors[i], cv2.FILLED)
+                        cv2.circle(image, (cx, cy), 10, colors[i], cv2.FILLED)
                 
-                # if id == 9:
-                    # cv2.circle(image, (cx, cy), 25, (255, 0, 255), cv2.FILLED)
-                    # cv2.circle(image, (cx, cy), 0, (255, 0, 255), 500) 
+                
 
             mpDraw.draw_landmarks(image, handLms, mpHands.HAND_CONNECTIONS)
-    cv2.imshow("Output", image)
+
+    # Window sizing consistency
+    # Get the frame dimensions and calculate the aspect ratio
+    height, width, _ = image.shape
+    aspect_ratio = width / height
+
+    # Set the window size to maintain the aspect ratio
+    window_width = 800  # Set your desired width
+    window_height = int(window_width / aspect_ratio)
+    
+    # Create a resizable window with the calculated size
+    cv2.namedWindow("Video", cv2.WINDOW_NORMAL)
+    cv2.resizeWindow("Video", window_width, window_height)
+
+    cv2.imshow("Video", image)
     cv2.waitKey(1)
