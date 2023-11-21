@@ -125,7 +125,7 @@ def main():
         aspect_ratio = width / height
 
         # Set the window size to maintain the aspect ratio
-        window_width = 1200  # Set your desired width
+        window_width = 1000  # Set your desired width
         window_height = int(window_width / aspect_ratio)
         
         # Create a resizable window with the calculated size
