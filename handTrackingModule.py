@@ -18,10 +18,8 @@ class handTracker():
     def handsFinder(self,image,draw=True):
         imageRGB = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
         self.results = self.hands.process(imageRGB)
-
         if self.results.multi_hand_landmarks:
             for handLms in self.results.multi_hand_landmarks:
-
                 if draw:
                     self.mpDraw.draw_landmarks(image, handLms, self.mpHands.HAND_CONNECTIONS)
         return image
@@ -34,9 +32,7 @@ class handTracker():
                 h,w,c = image.shape
                 cx,cy = int(lm.x*w), int(lm.y*h)
                 lmlist.append([id,cx,cy])
-
-        return lmlist
-    
+        return lmlist    
 
     def isThumbsUp(self, lmList):
         if len(lmList) == 21 and self.handOrientation(lmList, "up"):
@@ -63,6 +59,14 @@ class handTracker():
                 return True
         return False
     
+    def isOkay(self, lmList):
+        if len(lmList) == 21 and self.handOrientation(lmList, "up"):
+            difference_index_thumb = handTracker.calculate_distance(lmList[4], lmList[8])
+            difference_index_reference = handTracker.calculate_distance(lmList[11], lmList[12])
+            if (difference_index_thumb < difference_index_reference * 2) and (not self.isAbove(lmList[8], lmList, [12, 16, 20])):
+                return True
+        return False
+    
     def isAbove(self, target, lmList, landmarks):
         values = []
         if len(lmList) == 21:
@@ -70,7 +74,6 @@ class handTracker():
                 if target[2] < lmList[lm][2]:
                     values.append(True)
                 else: values.append(False)
-            
             for val in values:
                 if not val:
                     return False
@@ -122,7 +125,7 @@ def main():
         aspect_ratio = width / height
 
         # Set the window size to maintain the aspect ratio
-        window_width = 1000  # Set your desired width
+        window_width = 1200  # Set your desired width
         window_height = int(window_width / aspect_ratio)
         
         # Create a resizable window with the calculated size
@@ -138,8 +141,10 @@ def main():
             print("Thumb up")
         elif tracker.isPointingUp(lmList):
             print("Pointing up")
-        elif (tracker.isBird(lmList)):
+        elif tracker.isBird(lmList):
             print("Bird!")
+        elif tracker.isOkay(lmList):
+            print("Okay")
         else: print("*No sign detected*")
 
         # Display updated image
