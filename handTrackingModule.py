@@ -39,11 +39,12 @@ class handTracker():
 
     def isThumbsUp(self, lmList):
         if len(lmList) == 21:
-            distance_index_thumb = handTracker.calculate_distance(lmList[4], lmList[8])
-            if (distance_index_thumb > 100) and (distance_index_thumb < 200):
-                if lmList[4][2] < lmList[8][2]:
-                    if lmList[4][2] < lmList[12][2]:
-                        return True
+            landmarks = [8, 12, 16, 20]
+            distance_thumb_index = handTracker.calculate_distance(lmList[4], lmList[8])
+            distance_index_middle = handTracker.calculate_distance(lmList[8], lmList[12])
+            if (distance_thumb_index > (distance_index_middle * 2)):
+                return True
+
         return False
 
     def isPointingUp(self, lmList):
