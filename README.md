@@ -13,4 +13,6 @@ Mac:
 Windows:
     py handTrackingModule.py
 
+    pip install mediapipe
+
 [^1]: Run the following commands to manially instlal the required libraries. 
