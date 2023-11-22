@@ -102,13 +102,14 @@ class handTracker():
             elif (orientation.lower() == "down"):
                 if (finger_average_position[2] > lmList[0][2]):
                     return True
-            elif ():
-                # Determine if hand is horizontal left
-                pass
-            elif ():
-                # Determine if hand is horizontal right
-                pass
         return False
+    
+    def handDirection(self, lmlList, direction):
+
+        if len(lmlList) == 21:
+            
+            pass
+        pass
     
     @staticmethod
     def calculate_average_position(lmList, landmarks):
@@ -159,16 +160,16 @@ def main():
         lmList = tracker.positionFinder(image)
         # Window sizing consistency
         # Get the frame dimensions and calculate the aspect ratio
-        height, width, _ = image.shape
-        aspect_ratio = width / height
+        # height, width, _ = image.shape
+        # aspect_ratio = width / height
 
         # Set the window size to maintain the aspect ratio
-        window_width = 1000  # Set your desired width
-        window_height = int(window_width / aspect_ratio)
+        # window_width = 1000  # Set your desired width
+        # window_height = int(window_width / aspect_ratio)
         
         # Create a resizable window with the calculated size
         cv2.namedWindow("Video", cv2.WINDOW_NORMAL)
-        cv2.resizeWindow("Video", window_width, window_height)
+        # cv2.resizeWindow("Video", window_width, window_height)
         # Mirror the image horizontally
         image = cv2.flip(image, 1)
 
