@@ -107,9 +107,12 @@ class handTracker():
     def handDirection(self, lmlList, direction):
 
         if len(lmlList) == 21:
-            
-            pass
-        pass
+            if direction.lower() == "left":
+                
+                pass
+            elif direction.lower() == "right":
+                
+                pass
     
     @staticmethod
     def calculate_average_position(lmList, landmarks):
@@ -131,15 +134,12 @@ class handTracker():
     @staticmethod
     def calculate_triangle_angles(a, b, c):
         try:
-            # Check if the side lengths form a valid triangle
             if a + b <= c or a + c <= b or b + c <= a:
                 raise ValueError("Invalid triangle: The sum of any two sides must be greater than the third side.")
 
-            # Calculate the angle opposite side 'a' using the law of cosines
             angle_A_rad = math.acos((b**2 + c**2 - a**2) / (2 * b * c))
             angle_A_deg = math.degrees(angle_A_rad)
 
-            # Calculate the other two angles using the law of sines
             sin_angle_B = (b / c) * math.sin(angle_A_rad)
             angle_B_rad = math.asin(sin_angle_B)
             angle_B_deg = math.degrees(angle_B_rad)
