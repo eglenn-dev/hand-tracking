@@ -42,7 +42,7 @@ while True:
 
                 for i in range(len(colors)):
                     if id == i:
-                        cv2.circle(image, (cx, cy), 10, colors[i], cv2.FILLED)
+                        cv2.circle(image, (cx, cy), 8, colors[i], cv2.FILLED)
                 
                 
 
