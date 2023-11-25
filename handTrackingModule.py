@@ -176,13 +176,11 @@ def main():
 
         # Check for symbols
         clear_console()
-        # if tracker.isThumbsUp(lmList): print("Thumb up")
-        # elif tracker.isPointingUp(lmList): print("Pointing up")
-        # elif tracker.isBird(lmList): print("Bird!")
-        # elif tracker.isOkay(lmList): print("Okay")
-        # elif tracker.isFingerGun(lmList): print("Finger gun")
-        if tracker.handDirection(lmList, "left"): print("left")
-        elif tracker.handDirection(lmList, "right"): print("right")
+        if tracker.isThumbsUp(lmList): print("Thumb up")
+        elif tracker.isPointingUp(lmList): print("Pointing up")
+        elif tracker.isBird(lmList): print("Bird!")
+        elif tracker.isOkay(lmList): print("Okay")
+        elif tracker.isFingerGun(lmList): print("Finger gun")
         else: print("*No sign detected*")
 
         # Display updated image
