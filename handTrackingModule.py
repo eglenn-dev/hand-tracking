@@ -105,15 +105,15 @@ class handTracker():
         return False
     
     def handDirection(self, lmlList, direction):
-
         if len(lmlList) == 21:
+            average_knuckle_position = handTracker.calculate_average_position(lmlList, [5, 9, 13, 17])
             if direction.lower() == "left":
-                
-                pass
+                if average_knuckle_position[1] > lmlList[0][1]:
+                    return True
             elif direction.lower() == "right":
-                
-                pass
-    
+                if average_knuckle_position[1] < lmlList[0][1]:
+                    return True
+
     @staticmethod
     def calculate_average_position(lmList, landmarks):
         x_total = 0
@@ -176,11 +176,13 @@ def main():
 
         # Check for symbols
         clear_console()
-        if tracker.isThumbsUp(lmList): print("Thumb up")
-        elif tracker.isPointingUp(lmList): print("Pointing up")
-        elif tracker.isBird(lmList): print("Bird!")
-        elif tracker.isOkay(lmList): print("Okay")
-        elif tracker.isFingerGun(lmList): print("Finger gun")
+        # if tracker.isThumbsUp(lmList): print("Thumb up")
+        # elif tracker.isPointingUp(lmList): print("Pointing up")
+        # elif tracker.isBird(lmList): print("Bird!")
+        # elif tracker.isOkay(lmList): print("Okay")
+        # elif tracker.isFingerGun(lmList): print("Finger gun")
+        if tracker.handDirection(lmList, "left"): print("left")
+        elif tracker.handDirection(lmList, "right"): print("right")
         else: print("*No sign detected*")
 
         # Display updated image
