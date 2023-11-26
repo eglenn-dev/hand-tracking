@@ -1,2 +1,3 @@
 # PyCach Folder For Testing
 __pycache__
+.pytest_cache
