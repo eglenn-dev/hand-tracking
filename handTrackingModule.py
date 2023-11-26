@@ -78,6 +78,12 @@ class handTracker():
                 return True
         return False
     
+    def isPeace(self, lmList):
+        if len(lmList) == 21:
+            if (self.isAbove(lmList[8], lmList, [5, 9, 13, 16, 17, 20])) and (self.isAbove(lmList[12], lmList, [5, 9, 13, 16, 17, 20])) and (self.handOrientation(lmList, "up")):
+                return True
+        return False
+    
     def isAbove(self, target, lmList, landmarks):
         values = []
         if len(lmList) == 21:
@@ -169,6 +175,7 @@ def main():
         elif tracker.isBird(lmList): print("Bird!")
         elif tracker.isOkay(lmList): print("Okay")
         elif tracker.isFingerGun(lmList): print("Finger gun")
+        elif tracker.isPeace(lmList): print("Peace")
         else: print("*No sign detected*")
 
         # Display updated image
