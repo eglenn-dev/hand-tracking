@@ -39,6 +39,7 @@ def test_pointingUp():
     assert not handTracker().isBird(lmList_pointing_up)
     assert not handTracker().isFingerGun(lmList_pointing_up)
     assert not handTracker().isOkay(lmList_pointing_up)
+    assert not handTracker().isPeace(lmList_pointing_up)
     assert handTracker().handOrientation(lmList_pointing_up, "up")
     assert not handTracker().handOrientation(lmList_pointing_up, "down")
 
@@ -49,6 +50,7 @@ def test_isFingerGun():
     assert not handTracker().isThumbsUp(lmList_finger_gun)
     assert not handTracker().isBird(lmList_finger_gun)
     assert not handTracker().isOkay(lmList_finger_gun)
+    assert not handTracker().isPeace(lmList_finger_gun)
     assert handTracker().handDirection(lmList_finger_gun, "left")
     assert not handTracker().handDirection(lmList_finger_gun, "right")
 
@@ -59,6 +61,7 @@ def test_isOkay():
     assert not handTracker().isPointingUp(lmList_okay)
     assert not handTracker().isThumbsUp(lmList_okay)
     assert not handTracker().isBird(lmList_okay)
+    assert not handTracker().isPeace(lmList_okay)
     assert not handTracker().handDirection(lmList_okay, "left")
     assert handTracker().handDirection(lmList_okay, "right")
 
@@ -69,6 +72,7 @@ def test_isBird():
     assert not handTracker().isFingerGun(lmList_bird)
     assert not handTracker().isPointingUp(lmList_bird)
     assert not handTracker().isThumbsUp(lmList_bird)
+    assert not handTracker().isPeace(lmList_bird)
     assert handTracker().handOrientation(lmList_bird, "up")
     assert not handTracker().handOrientation(lmList_bird, "down")
 
@@ -79,6 +83,7 @@ def test_isThumbUp():
     assert not handTracker().isOkay(lmList_thumb_up)
     assert not handTracker().isFingerGun(lmList_thumb_up)
     assert not handTracker().isPointingUp(lmList_thumb_up)
+    assert not handTracker().isPeace(lmList_thumb_up)
     assert handTracker().handDirection(lmList_thumb_up, "left")
     assert not handTracker().handDirection(lmList_thumb_up, "right")
 
@@ -89,6 +94,7 @@ def test_isHandUp():
     assert not handTracker().isOkay(lmList_hand_up)
     assert not handTracker().isFingerGun(lmList_hand_up)
     assert not handTracker().isPointingUp(lmList_hand_up)
+    assert not handTracker().isPeace(lmList_hand_up)
     assert handTracker().handOrientation(lmList_hand_up, "up")
     assert not handTracker().handOrientation(lmList_hand_up, "down")
 
@@ -99,8 +105,20 @@ def test_isHandDown():
     assert not handTracker().isOkay(lmList_hand_down)
     assert not handTracker().isFingerGun(lmList_hand_down)
     assert not handTracker().isPointingUp(lmList_hand_down)
+    assert not handTracker().isPeace(lmList_hand_down)
     assert not handTracker().handOrientation(lmList_hand_down, "up")
     assert handTracker().handOrientation(lmList_hand_down, "down")
+
+def test_isPeace():
+    lmList_peace = [[0, 229, 407], [1, 272, 393], [2, 299, 359], [3, 292, 328], [4, 268, 306], [5, 288, 282], [6, 311, 234], [7, 322, 204], [8, 329, 177], [9, 257, 278], [10, 252, 216], [11, 251, 180], [12, 247, 149], [13, 227, 291], [14, 237, 256], [15, 252, 295], [16, 256, 322], [17, 201, 314], [18, 220, 295], [19, 235, 321], [20, 239, 342]]
+    assert handTracker().isPeace(lmList_peace)
+    assert not handTracker().isThumbsUp(lmList_peace)
+    assert not handTracker().isBird(lmList_peace)
+    assert not handTracker().isOkay(lmList_peace)
+    assert not handTracker().isFingerGun(lmList_peace)
+    assert not handTracker().isPointingUp(lmList_peace)
+    assert handTracker().handOrientation(lmList_peace, "up")
+    assert not handTracker().handOrientation(lmList_peace, "down")
 
 def test_isHandLeft():
     lmList_hand_left = [[0, 186, 362], [1, 202, 298], [2, 232, 260], [3, 267, 235], [4, 296, 210], [5, 305, 263], [6, 391, 246], [7, 438, 244], [8, 474, 246], [9, 320, 298], [10, 418, 288], [11, 475, 286], [12, 514, 287], [13, 323, 338], [14, 417, 341], [15, 471, 347], [16, 510, 352], [17, 314, 377], [18, 386, 390], [19, 426, 400], [20, 458, 408]]
