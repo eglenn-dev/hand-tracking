@@ -6,7 +6,6 @@ from handTrackingModule import handTracker
 
 hand = handTracker()
 
-# Create a fixture to initialize the handTracker class for testing
 @pytest.fixture
 def hand_tracker_instance():
     return handTracker()
@@ -25,6 +24,13 @@ def test_calculate_average_position():
     lmList = [[0, 354, 485], [1, 302, 456], [2, 266, 407], [3, 242, 366], [4, 218, 336], [5, 314, 335], [6, 298, 279], [7, 287, 245], [8, 278, 214], [9, 350, 330], [10, 353, 268], [11, 351, 228], [12, 349, 194], [13, 380, 341], [14, 392, 282], [15, 397, 245], [16, 398, 211], [17, 406, 361], [18, 421, 319], [19, 429, 289], [20, 435, 260]]
     check_average_calculator(lmList, [5, 9, 13, 17], [0, 362.5, 341.75])
     check_average_calculator(lmList, [0, 4, 6, 7, 19, 20], [0, 336.84, 315.67])
+
+def test_isAbove():
+    lmList_isAbove = [[0, 401, 392], [1, 336, 365], [2, 284, 309], [3, 266, 253], [4, 303, 238], [5, 322, 235], [6, 309, 190], [7, 314, 234], [8, 323, 269], [9, 362, 225], [10, 351, 174], [11, 350, 231], [12, 354, 273], [13, 403, 222], [14, 400, 160], [15, 387, 206], [16, 379, 247], [17, 442, 228], [18, 450, 172], [19, 451, 139], [20, 449, 110]]
+    assert handTracker().isAbove(lmList_isAbove[20], lmList_isAbove, [8, 12, 16])
+    assert handTracker().isAbove(lmList_isAbove[20], lmList_isAbove, [5, 9, 13])
+    assert not handTracker().isAbove(lmList_isAbove[0], lmList_isAbove, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
+    assert not handTracker().isAbove(lmList_isAbove[8], lmList_isAbove, [18, 19, 20])
 
 def test_pointingUp():
     lmList_pointing_up = [[0, 217, 494], [1, 260, 478], [2, 299, 449], [3, 320, 417], [4, 300, 398], [5, 272, 352], [6, 280, 291], [7, 285, 253], [8, 285, 221], [9, 236, 350], [10, 280, 332], [11, 288, 390], [12, 276, 415], [13, 206, 361], [14, 253, 268], [15, 257, 416], [16, 241, 430], [17, 178, 382], [18, 221, 401], [19, 230, 432], [20, 217, 439]]
