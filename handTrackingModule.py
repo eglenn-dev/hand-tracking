@@ -63,7 +63,7 @@ class handTracker():
         if len(lmList) == 21 and self.handOrientation(lmList, "up"):
             difference_index_thumb = handTracker.calculate_distance(lmList[4], lmList[8])
             difference_index_reference = handTracker.calculate_distance(lmList[11], lmList[12])
-            if (difference_index_thumb < difference_index_reference * 2) and (not self.isAbove(lmList[8], lmList, [12, 16, 20])):
+            if (difference_index_thumb < difference_index_reference * 2) and (not self.isAbove(lmList[8], lmList, [12, 16, 20])) and (self.isAbove(lmList[8], lmList, [4])):
                 return True
         return False
     
@@ -74,7 +74,7 @@ class handTracker():
             c = handTracker.calculate_distance(lmList[4], lmList[8])
             angles = handTracker.calculate_triangle_angles(a, b, c)
 
-            if angles[2] > 90 and angles[2] < 150 and self.isAbove(lmList[4], lmList, [8]):
+            if angles[2] > 90 and angles[2] < 150 and self.isAbove(lmList[4], lmList, [8]) and self.isAbove(lmList[8], lmList, [12, 16, 20]):
                 return True
         return False
     
@@ -90,7 +90,6 @@ class handTracker():
                     return False
             return True
         return False
-    
 
     def handOrientation(self, lmList, orientation):
         landmarks = list(range(1, 20))
@@ -113,7 +112,8 @@ class handTracker():
             elif direction.lower() == "right":
                 if average_knuckle_position[1] < lmlList[0][1]:
                     return True
-
+            else: return False    
+            
     @staticmethod
     def calculate_average_position(lmList, landmarks):
         x_total = 0
@@ -123,8 +123,8 @@ class handTracker():
                 x_total += lmList[landmarks[i]][1]            
                 y_total += lmList[landmarks[i]][2]
             except: return [0, 0, 0]       
-        average_x = x_total / len(landmarks)
-        average_y = y_total / len(landmarks)
+        average_x = math.ceil((x_total / len(landmarks)) * 100) / 100
+        average_y = math.ceil((y_total / len(landmarks)) * 100) / 100
         return [0, average_x, average_y]
     
     @staticmethod
@@ -158,21 +158,9 @@ def main():
         success,image = cap.read()
         image = tracker.handsFinder(image)
         lmList = tracker.positionFinder(image)
-        # Window sizing consistency
-        # Get the frame dimensions and calculate the aspect ratio
-        # height, width, _ = image.shape
-        # aspect_ratio = width / height
-
-        # Set the window size to maintain the aspect ratio
-        # window_width = 1000  # Set your desired width
-        # window_height = int(window_width / aspect_ratio)
         
-        # Create a resizable window with the calculated size
         cv2.namedWindow("Video", cv2.WINDOW_NORMAL)
-        # cv2.resizeWindow("Video", window_width, window_height)
-        # Mirror the image horizontally
         image = cv2.flip(image, 1)
-
 
         # Check for symbols
         clear_console()
