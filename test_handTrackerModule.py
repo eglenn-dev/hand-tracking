@@ -102,6 +102,15 @@ def test_isHandDown():
     assert not handTracker().handOrientation(lmList_hand_down, "up")
     assert handTracker().handOrientation(lmList_hand_down, "down")
 
+def test_isHandLeft():
+    lmList_hand_left = [[0, 186, 362], [1, 202, 298], [2, 232, 260], [3, 267, 235], [4, 296, 210], [5, 305, 263], [6, 391, 246], [7, 438, 244], [8, 474, 246], [9, 320, 298], [10, 418, 288], [11, 475, 286], [12, 514, 287], [13, 323, 338], [14, 417, 341], [15, 471, 347], [16, 510, 352], [17, 314, 377], [18, 386, 390], [19, 426, 400], [20, 458, 408]]
+    assert handTracker().handDirection(lmList_hand_left, "left")
+    assert not handTracker().handDirection(lmList_hand_left, "right")
+
+def test_isHandRight():
+    lmList_hand_right = [[0, 492, 342], [1, 480, 261], [2, 445, 203], [3, 406, 157], [4, 392, 114], [5, 369, 202], [6, 279, 184], [7, 224, 180], [8, 178, 178], [9, 352, 240], [10, 247, 233], [11, 185, 229], [12, 137, 227], [13, 345, 285], [14, 246, 285], [15, 188, 288], [16, 142, 290], [17, 348, 331], [18, 273, 341], [19, 232, 351], [20, 196, 356]]
+    assert handTracker().handDirection(lmList_hand_right, "right")
+    assert not handTracker().handDirection(lmList_hand_right, "left")
 
 def check_average_calculator(lmList, landmarks, expected):
     items = handTracker.calculate_average_position(lmList, landmarks)
