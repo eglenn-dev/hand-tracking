@@ -4,7 +4,7 @@ import math
 import os
 
 class handTracker():
-    def __init__(self, mode=False, maxHands=2, detectionCon=0.5,modelComplexity=1,trackCon=0.5):
+    def __init__(self, mode=False, maxHands=2, detectionCon=0.5,modelComplexity=1,trackCon=0.5, lmList=[]):
         self.mode = mode
         self.maxHands = maxHands
         self.detectionCon = detectionCon
@@ -14,6 +14,7 @@ class handTracker():
         self.hands = self.mpHands.Hands(self.mode, self.maxHands,self.modelComplex,
                                         self.detectionCon, self.trackCon)
         self.mpDraw = mp.solutions.drawing_utils
+        self.lmList = lmList
 
     def handsFinder(self,image,draw=True):
         imageRGB = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
@@ -24,67 +25,80 @@ class handTracker():
                     self.mpDraw.draw_landmarks(image, handLms, self.mpHands.HAND_CONNECTIONS)
         return image
 
-    def positionFinder(self,image, handNo=0, draw=True):
-        lmlist = []
+    def positionFinder(self, image, handNo=0):
         if self.results.multi_hand_landmarks:
+            self.lmList = []
             Hand = self.results.multi_hand_landmarks[handNo]
             for id, lm in enumerate(Hand.landmark):
                 h,w,c = image.shape
                 cx,cy = int(lm.x*w), int(lm.y*h)
-                lmlist.append([id,cx,cy])
-        return lmlist    
+                self.lmList.append([id,cx,cy])
 
-    def isThumbsUp(self, lmList):
-        if len(lmList) == 21 and self.handOrientation(lmList, "up"):
+    def isThumbsUp(self, lmList=None):
+        if lmList == None:
+            lmList = self.lmList
+        if len(lmList) == 21 and self.handOrientation("up"):
             distance_thumb_index = handTracker.calculate_distance(lmList[4], lmList[8])
             distance_index_middle = handTracker.calculate_distance(lmList[8], lmList[12])
             if (distance_thumb_index > (distance_index_middle * 2)) and (lmList[4][2] < lmList[8][2]):
                 return True
         return False
-
-    def isPointingUp(self, lmList):
-        if len(lmList) == 21 and self.handOrientation(lmList, "up"):
+    
+    def isPointingUp(self, lmList=None):
+        if lmList == None:
+            lmList = self.lmList
+        if len(lmList) == 21 and self.handOrientation("up"):
             landmarks = [12, 16, 20]
             average_position = handTracker.calculate_average_position(lmList, landmarks)
             distance_index_middle = handTracker.calculate_distance(lmList[8], lmList[12])
             distance_middle_ring = handTracker.calculate_distance(lmList[12], lmList[16])
-            if (distance_index_middle > (distance_middle_ring * 2)) and (lmList[8][2] < average_position[2]) and (lmList[8][2] < lmList[12][2]) and self.isAbove(lmList[8], lmList, [4]):
+            if (distance_index_middle > (distance_middle_ring * 2)) and (lmList[8][2] < average_position[2]) and (lmList[8][2] < lmList[12][2]) and self.isAbove(lmList[8], [4]):
                 return True
         return False
     
-    def isBird(self, lmList):
-        if len(lmList) == 21 and self.handOrientation(lmList, "up"):
+    def isBird(self, lmList=None):
+        if lmList == None:
+            lmList = self.lmList
+        if len(lmList) == 21 and self.handOrientation("up"):
             landmarks = [4, 8, 16, 20]
-            if (self.isAbove(lmList[10], lmList, landmarks)) and (lmList[12][2] < lmList[10][2]):
+            if (self.isAbove(lmList[10], landmarks)) and (lmList[12][2] < lmList[10][2]):
                 return True
         return False
     
-    def isOkay(self, lmList):
-        if len(lmList) == 21 and self.handOrientation(lmList, "up"):
+    def isOkay(self, lmList=None):
+        if lmList == None:
+            lmList = self.lmList
+        if len(lmList) == 21 and self.handOrientation("up"):
             difference_index_thumb = handTracker.calculate_distance(lmList[4], lmList[8])
             difference_index_reference = handTracker.calculate_distance(lmList[11], lmList[12])
-            if (difference_index_thumb < difference_index_reference * 2) and (not self.isAbove(lmList[8], lmList, [12, 16, 20])) and (self.isAbove(lmList[8], lmList, [4])):
+            if (difference_index_thumb < difference_index_reference * 2) and (not self.isAbove(lmList[8], [12, 16, 20])) and (self.isAbove(lmList[8], [4])):
                 return True
         return False
     
-    def isFingerGun(self, lmList):
+    def isFingerGun(self, lmList=None):
+        if lmList == None:
+            lmList = self.lmList
         if len(lmList) == 21:
             a = handTracker.calculate_distance(lmList[2], lmList[4])
             b = handTracker.calculate_distance(lmList[2], lmList[8])
             c = handTracker.calculate_distance(lmList[4], lmList[8])
             angles = handTracker.calculate_triangle_angles(a, b, c)
 
-            if angles[2] > 90 and angles[2] < 150 and self.isAbove(lmList[4], lmList, [8]) and self.isAbove(lmList[8], lmList, [12, 16, 20]):
+            if angles[2] > 90 and angles[2] < 150 and self.isAbove(lmList[4], [8]) and self.isAbove(lmList[8], [12, 16, 20]):
                 return True
         return False
     
-    def isPeace(self, lmList):
+    def isPeace(self, lmList=None):
+        if lmList == None:
+            lmList = self.lmList
         if len(lmList) == 21:
-            if (self.isAbove(lmList[8], lmList, [5, 9, 13, 16, 17, 20])) and (self.isAbove(lmList[12], lmList, [5, 9, 13, 16, 17, 20])) and (self.handOrientation(lmList, "up")):
+            if (self.isAbove(lmList[8], [5, 9, 13, 16, 17, 20])) and (self.isAbove(lmList[12], [5, 9, 13, 16, 17, 20])) and (self.handOrientation("up")):
                 return True
         return False
     
-    def isAbove(self, target, lmList, landmarks):
+    def isAbove(self, target, landmarks, lmList=None):
+        if lmList == None:
+            lmList = self.lmList
         values = []
         if len(lmList) == 21:
             for lm in landmarks:
@@ -97,7 +111,9 @@ class handTracker():
             return True
         return False
 
-    def handOrientation(self, lmList, orientation):
+    def handOrientation(self, orientation, lmList=None):
+        if lmList == None:
+            lmList = self.lmList
         landmarks = list(range(1, 20))
         finger_average_position = handTracker.calculate_average_position(lmList, landmarks)
         if len(lmList) == 21:
@@ -109,14 +125,16 @@ class handTracker():
                     return True
         return False
     
-    def handDirection(self, lmlList, direction):
-        if len(lmlList) == 21:
-            average_knuckle_position = handTracker.calculate_average_position(lmlList, [5, 9, 13, 17])
+    def handDirection(self, direction, lmList=None):
+        if lmList == None:
+            lmList = self.lmList
+        if len(lmList) == 21:
+            average_knuckle_position = handTracker.calculate_average_position(lmList, [5, 9, 13, 17])
             if direction.lower() == "left":
-                if average_knuckle_position[1] > lmlList[0][1]:
+                if average_knuckle_position[1] > lmList[0][1]:
                     return True
             elif direction.lower() == "right":
-                if average_knuckle_position[1] < lmlList[0][1]:
+                if average_knuckle_position[1] < lmList[0][1]:
                     return True
             else: return False    
             
@@ -163,19 +181,19 @@ def main():
     while True:
         success,image = cap.read()
         image = tracker.handsFinder(image)
-        lmList = tracker.positionFinder(image)
+        tracker.positionFinder(image)
         
         cv2.namedWindow("Video", cv2.WINDOW_NORMAL)
         image = cv2.flip(image, 1)
 
         # Check for symbols
         clear_console()
-        if tracker.isThumbsUp(lmList): print("Thumb up")
-        elif tracker.isPointingUp(lmList): print("Pointing up")
-        elif tracker.isBird(lmList): print("Bird!")
-        elif tracker.isOkay(lmList): print("Okay")
-        elif tracker.isFingerGun(lmList): print("Finger gun")
-        elif tracker.isPeace(lmList): print("Peace")
+        if tracker.isThumbsUp(): print("Thumb up")
+        elif tracker.isPointingUp(): print("Pointing up")
+        elif tracker.isBird(): print("Bird!")
+        elif tracker.isOkay(): print("Okay")
+        elif tracker.isFingerGun(): print("Finger gun")
+        elif tracker.isPeace(): print("Peace")
         else: print("*No sign detected*")
 
         # Display updated image
