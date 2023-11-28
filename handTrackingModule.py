@@ -11,8 +11,7 @@ class handTracker():
         self.modelComplex = modelComplexity
         self.trackCon = trackCon
         self.mpHands = mp.solutions.hands
-        self.hands = self.mpHands.Hands(self.mode, self.maxHands,self.modelComplex,
-                                        self.detectionCon, self.trackCon)
+        self.hands = self.mpHands.Hands(self.mode, self.maxHands, self.modelComplex, self.detectionCon, self.trackCon)
         self.mpDraw = mp.solutions.drawing_utils
         self.lmList = lmList
 
@@ -185,7 +184,7 @@ def main():
     tracker = handTracker()
 
     while True:
-        success,image = cap.read()
+        success, image = cap.read()
         image = tracker.handsFinder(image)
         tracker.positionFinder(image)
         
@@ -209,9 +208,9 @@ def main():
 
 def clear_console():
     # Check if the operating system is Windows or Unix-based
-    if os.name == 'nt': # Windows
+    if os.name == 'nt':
         os.system('cls')
-    else:  # for Unix/Linux/MacOS
+    else:
         os.system('clear')
 
 if __name__ == "__main__":
