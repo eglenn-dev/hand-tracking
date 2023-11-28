@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hand Gesture Recognition</title>
+</head>
+
+<body>
+    <h1>Hand Gesture Recognition</h1>
+    <img id="video_feed" src="{{ url_for('video_feed') }}" alt="Video Feed">
+    <p id="gesture_text"></p>
+
+    <video id="webcam" width="640" height="480" autoplay></video>
+    <script>
+        const gestureText = document.getElementById('gesture_text');
+        const webcam = document.getElementById('webcam');
+
+        // Use getUserMedia to access the webcam
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                webcam.srcObject = stream;
+
+                const source = new EventSource('/video_feed');
+                source.addEventListener('message', (event) => {
+                    const [gesture] = event.data.split('\r\n\r\n');
+                    gestureText.textContent = gesture;
+                });
+            })
+            .catch((error) => console.error('Error accessing webcam:', error));
+    </script>
+
+</body>
+
+</html>
