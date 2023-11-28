@@ -37,10 +37,10 @@ class handTracker():
     def isThumbsUp(self, lmList=None):
         if lmList == None:
             lmList = self.lmList
-        if len(lmList) == 21 and self.handOrientation("up"):
-            distance_thumb_index = handTracker.calculate_distance(lmList[4], lmList[8])
-            distance_index_middle = handTracker.calculate_distance(lmList[8], lmList[12])
-            if (distance_thumb_index > (distance_index_middle * 2)) and (lmList[4][2] < lmList[8][2]):
+        if len(lmList) == 21:
+            lengthA = handTracker.calculate_distance(lmList[5], lmList[6]) + handTracker.calculate_distance(lmList[6], lmList[7])
+            lengthB = handTracker.calculate_distance(lmList[5], lmList[8])
+            if (lengthB < lengthA) and (self.isAbove(lmList[3], [5, 6, 7, 8])) and (self.isAbove(lmList[4], [3, 8])):
                 return True
         return False
     
@@ -79,12 +79,13 @@ class handTracker():
         if lmList == None:
             lmList = self.lmList
         if len(lmList) == 21:
-            a = handTracker.calculate_distance(lmList[2], lmList[4])
-            b = handTracker.calculate_distance(lmList[2], lmList[8])
-            c = handTracker.calculate_distance(lmList[4], lmList[8])
+            a = abs(lmList[4][2] - lmList[2][2])
+            b = abs(lmList[8][1] - lmList[2][1])
+            c = self.calculate_distance(lmList[4], lmList[8])
             angles = handTracker.calculate_triangle_angles(a, b, c)
-
-            if angles[2] > 90 and angles[2] < 150 and self.isAbove(lmList[4], [8]) and self.isAbove(lmList[8], [12, 16, 20]):
+            distanceA = handTracker.calculate_distance(lmList[5], lmList[8])
+            distanceB = handTracker.calculate_distance(lmList[5], lmList[12])
+            if (angles[2] > 55 and angles[2] < 100) and self.isAbove(lmList[4], [8]) and self.isAbove(lmList[8], [12, 16, 20]) and (distanceA > distanceB):
                 return True
         return False
     
@@ -92,7 +93,19 @@ class handTracker():
         if lmList == None:
             lmList = self.lmList
         if len(lmList) == 21:
-            if (self.isAbove(lmList[8], [5, 9, 13, 16, 17, 20])) and (self.isAbove(lmList[12], [5, 9, 13, 16, 17, 20])) and (self.handOrientation("up")):
+            distanceA = self.calculate_distance(lmList[6], lmList[10])
+            distanceB = self.calculate_distance(lmList[8], lmList[12])
+            if (self.isAbove(lmList[8], [5, 9, 13, 16, 17, 20])) and (self.isAbove(lmList[12], [5, 9, 13, 16, 17, 20])) and (distanceB > (1.1 * distanceA)) and (self.handOrientation("up")):
+                return True
+        return False
+    
+    def isVictory(self, lmList=None):
+        if lmList == None:
+            lmList = self.lmList
+        if len(lmList) == 21:
+            distanceA = self.calculate_distance(lmList[10], lmList[14])
+            distanceB = self.calculate_distance(lmList[12], lmList[16])
+            if (self.isAbove(lmList[16], [10, 14])) and (self.isAbove(lmList[12], [10, 14])) and (distanceB > (1.5 * distanceA)) and self.handOrientation("up"):
                 return True
         return False
     
@@ -137,7 +150,7 @@ class handTracker():
                 if average_knuckle_position[1] < lmList[0][1]:
                     return True
             else: return False    
-            
+
     @staticmethod
     def calculate_average_position(lmList, landmarks):
         x_total = 0
@@ -158,19 +171,12 @@ class handTracker():
     @staticmethod
     def calculate_triangle_angles(a, b, c):
         try:
-            if a + b <= c or a + c <= b or b + c <= a:
-                raise ValueError("Invalid triangle: The sum of any two sides must be greater than the third side.")
-
-            angle_A_rad = math.acos((b**2 + c**2 - a**2) / (2 * b * c))
-            angle_A_deg = math.degrees(angle_A_rad)
-
-            sin_angle_B = (b / c) * math.sin(angle_A_rad)
-            angle_B_rad = math.asin(sin_angle_B)
-            angle_B_deg = math.degrees(angle_B_rad)
-
-            angle_C_deg = 180 - angle_A_deg - angle_B_deg
-        except: return [0, 0, 0]
-        return angle_A_deg, angle_B_deg, angle_C_deg
+            # Calculate angles using law of cosines
+            A = math.degrees(math.acos((b**2 + c**2 - a**2) / (2 * b * c)))
+            B = math.degrees(math.acos((a**2 + c**2 - b**2) / (2 * a * c)))
+            C = 180 - A - B
+            return A, B, C
+        except: return 0, 0, 0
 
 # ======================================================
 
@@ -194,6 +200,7 @@ def main():
         elif tracker.isOkay(): print("Okay")
         elif tracker.isFingerGun(): print("Finger gun")
         elif tracker.isPeace(): print("Peace")
+        elif tracker.isVictory(): print("Victory")
         else: print("*No sign detected*")
 
         # Display updated image
