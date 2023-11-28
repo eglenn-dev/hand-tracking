@@ -2,7 +2,7 @@ import mediapipe as mp
 import pytest
 from handTrackingModule import handTracker
 
-methods_list = ['isThumbsUp', 'isPointingUp', 'isBird', 'isOkay', 'isFingerGun', 'isPeace', 'isLove']
+methods_list = ['isThumbsUp', 'isPointingUp', 'isBird', 'isOkay', 'isFingerGun', 'isPeace', 'isVictory']
 
 def test_dataset_one():
     lmList = [[0, 354, 485], [1, 302, 456], [2, 266, 407], [3, 242, 366], [4, 218, 336], [5, 314, 335], [6, 298, 279], [7, 287, 245], [8, 278, 214], [9, 350, 330], [10, 353, 268], [11, 351, 228], [12, 349, 194], [13, 380, 341], [14, 392, 282], [15, 397, 245], [16, 398, 211], [17, 406, 361], [18, 421, 319], [19, 429, 289], [20, 435, 260]]
@@ -16,7 +16,6 @@ def test_dataset_two():
 
 def call_set_methods(obj, method_names):
     values = []
-
     for name in method_names:
         method = getattr(obj, name)
         try:
