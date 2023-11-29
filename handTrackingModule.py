@@ -85,7 +85,7 @@ class handTracker():
             angles = handTracker.calculate_triangle_angles(a, b, c)
             distanceA = handTracker.calculate_distance(lmList[5], lmList[8])
             distanceB = handTracker.calculate_distance(lmList[5], lmList[12])
-            if (angles[2] > 55 and angles[2] < 100) and self.isAbove(lmList[4], [8]) and self.isAbove(lmList[8], [12, 16, 20]) and (distanceA > distanceB):
+            if (angles[2] > 55 and angles[2] < 110) and self.isAbove(lmList[4], [8]) and self.isAbove(lmList[8], [12, 16, 20]) and (distanceA > distanceB):
                 return True
         return False
     
