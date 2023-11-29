@@ -7,9 +7,7 @@ Hand landmark diagram: [Hand.pdf](./docs/hand.pdf)
 ### 1. Install Dependencies [^1]
     pip install -r requirements.txt
 ### 2. Run the project file [^2]
-#### Mac:
     python3 handTrackingModule.py
-#### Windows:
     py handTrackingModule.py
 
 [^1]: Run the following commands to manially instlal the required libraries. 
