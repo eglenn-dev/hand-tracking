@@ -107,6 +107,14 @@ class handTracker():
             if (self.isAbove(lmList[16], [10, 14])) and (self.isAbove(lmList[12], [10, 14])) and (distanceB > (1.5 * distanceA)) and self.handOrientation("up"):
                 return True
         return False
+
+    def isO(self, lmList=None):
+        if lmList == None:
+            lmList = self.lmList
+        if len(lmList) == 21:
+
+            return True
+        return False
     
     def isAbove(self, target, landmarks, lmList=None):
         if lmList == None:
