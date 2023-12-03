@@ -4,7 +4,7 @@ from pytest import approx
 from handTrackingModule import handTracker
 
 hand = handTracker()
-methods_list = ['isThumbsUp', 'isPointingUp', 'isBird', 'isOkay', 'isFingerGun', 'isPeace', 'isVictory']
+methods_list = ['isThumbsUp', 'isPointingUp', 'isBird', 'isOkay', 'isFingerGun', 'isPeace', 'isVictory', 'isO']
 
 @pytest.fixture
 def hand_tracker_instance():
@@ -134,6 +134,17 @@ def test_isVictory():
             result = method()
             assert result == expected[i], f'Failed on {methods_list[i]}'
 
+def test_isO():
+    lmList_O = [[0, 1215, 470], [1, 1130, 426], [2, 1070, 366], [3, 1028, 320], [4, 1008, 273], [5, 1135, 275], [6, 1105, 205], [7, 1057, 212], [8, 1029, 237], [9, 1157, 267], [10, 1118, 179], [11, 1056, 194], [12, 1025, 231], [13, 1180, 267], [14, 1141, 178], [15, 1074, 196], [16, 1039, 235], [17, 1196, 274], [18, 1148, 204], [19, 1092, 210], [20, 1059, 239]]
+    test_hand = handTracker(lmList=lmList_O)
+    expected = [False] * len(methods_list)
+    expected[7] = True
+    for i in range(len(methods_list)):
+        method = getattr(test_hand, methods_list[i])
+        if callable(method):
+            result = method()
+            assert result == expected[i], f'Failed on {methods_list[i]}'
+
 def test_isHandLeft():
     lmList_hand_left = [[0, 186, 362], [1, 202, 298], [2, 232, 260], [3, 267, 235], [4, 296, 210], [5, 305, 263], [6, 391, 246], [7, 438, 244], [8, 474, 246], [9, 320, 298], [10, 418, 288], [11, 475, 286], [12, 514, 287], [13, 323, 338], [14, 417, 341], [15, 471, 347], [16, 510, 352], [17, 314, 377], [18, 386, 390], [19, 426, 400], [20, 458, 408]]
     test_hand = handTracker(lmList=lmList_hand_left)
@@ -147,7 +158,8 @@ def test_isHandRight():
     assert not test_hand.handDirection("left")
 
 def check_average_calculator(lmList, landmarks, expected):
-    items = handTracker.calculate_average_position(lmList, landmarks)
+    test_hand = handTracker(lmList=lmList)
+    items = test_hand.calculate_average_position(landmarks)
     for i in range(len(items)):
         assert items[i] == approx(expected[i])
 
