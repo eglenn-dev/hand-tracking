@@ -47,11 +47,7 @@ class handTracker():
         if lmList == None:
             lmList = self.lmList
         if len(lmList) == 21 and self.handOrientation("up"):
-            landmarks = [12, 16, 20]
-            average_position = handTracker.calculate_average_position(lmList, landmarks)
-            distance_index_middle = handTracker.calculate_distance(lmList[8], lmList[12])
-            distance_middle_ring = handTracker.calculate_distance(lmList[12], lmList[16])
-            if (distance_index_middle > (distance_middle_ring * 2)) and (lmList[8][2] < average_position[2]) and (lmList[8][2] < lmList[12][2]) and self.isAbove(lmList[8], [4]):
+            if (self.isAbove(lmList[7], [4, 12, 16, 20])) and (lmList[8][2] < lmList[6][2]):
                 return True
         return False
     
@@ -59,8 +55,7 @@ class handTracker():
         if lmList == None:
             lmList = self.lmList
         if len(lmList) == 21 and self.handOrientation("up"):
-            landmarks = [4, 8, 16, 20]
-            if (self.isAbove(lmList[10], landmarks)) and (lmList[12][2] < lmList[10][2]):
+            if (self.isAbove(lmList[10], [4, 8, 16, 20])) and (lmList[12][2] < lmList[10][2]):
                 return True
         return False
     
@@ -70,7 +65,7 @@ class handTracker():
         if len(lmList) == 21 and self.handOrientation("up"):
             difference_index_thumb = handTracker.calculate_distance(lmList[4], lmList[8])
             difference_index_reference = handTracker.calculate_distance(lmList[11], lmList[12])
-            if (difference_index_thumb < difference_index_reference * 2) and (not self.isAbove(lmList[8], [12, 16, 20])) and (self.isAbove(lmList[8], [4])):
+            if (difference_index_thumb < difference_index_reference * 2) and (not self.isAbove(lmList[6], [12, 16, 20])) and (self.isAbove(lmList[8], [4])) and (self.isAbove(lmList[10], [8])):
                 return True
         return False
     
@@ -92,9 +87,11 @@ class handTracker():
         if lmList == None:
             lmList = self.lmList
         if len(lmList) == 21:
-            distanceA = self.calculate_distance(lmList[6], lmList[10])
-            distanceB = self.calculate_distance(lmList[8], lmList[12])
-            if (self.isAbove(lmList[8], [5, 9, 13, 16, 17, 20])) and (self.isAbove(lmList[12], [5, 9, 13, 16, 17, 20])) and (distanceB > (1.1 * distanceA)) and (self.handOrientation("up")):
+            distance_knuckles = self.calculate_distance(lmList[6], lmList[10])
+            distance_tips = self.calculate_distance(lmList[8], lmList[12])
+            distance_index_thumb = self.calculate_distance(lmList[8], lmList[4])
+            index_height = self.calculate_distance(lmList[8], lmList[5])
+            if (self.isAbove(lmList[8], [5, 9, 13, 16, 17, 20])) and (self.isAbove(lmList[12], [5, 9, 13, 16, 17, 20])) and (distance_index_thumb > index_height) and (distance_tips > (1.1 * distance_knuckles)) and (self.handOrientation("up")) and (self.isAbove(lmList[10], [16, 20])):
                 return True
         return False
     
@@ -111,9 +108,12 @@ class handTracker():
     def isO(self, lmList=None):
         if lmList == None:
             lmList = self.lmList
-        if len(lmList) == 21:
-
-            return True
+        if len(lmList) == 21 and self.handOrientation("up"):
+            average_pos_tips =  self.calculate_average_position([8, 12, 16, 20])
+            distance_avg_thumb = self.calculate_distance(average_pos_tips, lmList[4])
+            control_distance = self.calculate_distance(lmList[3], lmList[4])
+            if (self.isAbove(lmList[6], [5, 9, 13, 17])) and (distance_avg_thumb < control_distance):
+                return True
         return False
     
     def isAbove(self, target, landmarks, lmList=None):
@@ -135,7 +135,7 @@ class handTracker():
         if lmList == None:
             lmList = self.lmList
         landmarks = list(range(1, 20))
-        finger_average_position = handTracker.calculate_average_position(lmList, landmarks)
+        finger_average_position = self.calculate_average_position(landmarks)
         if len(lmList) == 21:
             if (orientation.lower() == "up"):
                 if (finger_average_position[2] < lmList[0][2]):
@@ -149,7 +149,7 @@ class handTracker():
         if lmList == None:
             lmList = self.lmList
         if len(lmList) == 21:
-            average_knuckle_position = handTracker.calculate_average_position(lmList, [5, 9, 13, 17])
+            average_knuckle_position = self.calculate_average_position([5, 9, 13, 17])
             if direction.lower() == "left":
                 if average_knuckle_position[1] > lmList[0][1]:
                     return True
@@ -158,8 +158,9 @@ class handTracker():
                     return True
             else: return False    
 
-    @staticmethod
-    def calculate_average_position(lmList, landmarks):
+    def calculate_average_position(self, landmarks, lmList=None):
+        if lmList == None:
+            lmList = self.lmList
         x_total = 0
         y_total = 0
         for i in range(len(landmarks)):
@@ -208,6 +209,7 @@ def main():
         elif tracker.isFingerGun(): print("Finger gun")
         elif tracker.isPeace(): print("Peace")
         elif tracker.isVictory(): print("Victory")
+        elif tracker.isO(): print("O")
         else: print("*No sign detected*")
 
         # Display updated image
