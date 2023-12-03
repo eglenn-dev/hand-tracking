@@ -2,6 +2,7 @@ import cv2
 import mediapipe as mp
 import math
 import os
+import keyboard
 
 class handTracker():
     def __init__(self, mode=False, maxHands=2, detectionCon=0.5,modelComplexity=1,trackCon=0.5, lmList=[]):
@@ -98,10 +99,10 @@ class handTracker():
     def isVictory(self, lmList=None):
         if lmList == None:
             lmList = self.lmList
-        if len(lmList) == 21:
+        if len(lmList) == 21 and self.handOrientation("up"):
             distanceA = self.calculate_distance(lmList[10], lmList[14])
             distanceB = self.calculate_distance(lmList[12], lmList[16])
-            if (self.isAbove(lmList[16], [10, 14])) and (self.isAbove(lmList[12], [10, 14])) and (distanceB > (1.5 * distanceA)) and self.handOrientation("up"):
+            if (self.isAbove(lmList[16], [10, 14])) and (self.isAbove(lmList[12], [10, 14])) and (distanceB > (1.5 * distanceA)) and self.isAbove(lmList[8], [10, 14]): 
                 return True
         return False
 
@@ -214,7 +215,13 @@ def main():
 
         # Display updated image
         cv2.imshow("Video",image)
-        cv2.waitKey(1)
+
+        # Check if the 'q' key is pressed to exit the loop
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord('q'):
+            clear_console()
+            print("Keyboard interrupt on 'q' key.")
+            break
 
 def clear_console():
     # Check if the operating system is Windows or Unix-based
