@@ -18,6 +18,7 @@ def main():
 
             # Check for symbols
             clear_console()
+            print('To exit, press the \'q\' key.\n')
             if tracker.isThumbsUp(): print("Thumb up")
             elif tracker.isPointingUp(): print("Pointing up")
             elif tracker.isBird(): print("Bird!")
