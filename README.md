@@ -4,6 +4,8 @@
 
 The `handTracker` class is a Python implementation for hand tracking using the MediaPipe library. This class provides a convenient interface for detecting and tracking hands in images or video frames. It also includes functions to identify hand gestures such as thumbs up, pointing, bird, okay, finger gun, peace sign, victory, and the letter 'O'. The class utilizes the MediaPipe Hands module for accurate hand landmark estimation.
 
+<img src="./docs/img/moving-hand.gif" style="width: 50%;">
+
 ## Table of Contents
 
 - [Installation](#installation)
@@ -26,6 +28,7 @@ The `handTracker` class is a Python implementation for hand tracking using the M
   - [calculate_average_position](#calculate_average_position)
   - [calculate_distance](#calculate_distance)
   - [calculate_triangle_angles](#calculate_triangle_angles)
+- [Landmarks & Positions](#landmarks)
 
 ## Installation<a name="installation"></a>
 
@@ -336,3 +339,20 @@ def calculate_triangle_angles(a, b, c):
     - tuple: (angleA, angleB, angleC).
     """
 ```
+
+## Landmark and Positions<a name="landmarks"></a>
+
+Each joint on the hand it represented in [the object's](#constructor) lmList list. There is another list that contatins the landmark number, and the x and y positions. All are stored as an intiger. Calculations in the [class](#constructor) are all done based on the relative position of the landmarks.
+
+#### Example data:
+
+```{python}
+    # [int landmark number, int x-position, int y-position]
+    lmList1 = [
+        [0, 354, 485],
+        [1, 302, 456],
+        [2, 266, 407],
+        ...]
+```
+
+<img src="./docs/img/landmarked-hand.png" style="width: 50%;">
