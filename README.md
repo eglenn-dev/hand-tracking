@@ -4,7 +4,7 @@
 
 The `handTracker` class is a Python implementation for hand tracking using the MediaPipe library. This class provides a convenient interface for detecting and tracking hands in images or video frames. It also includes functions to identify hand gestures such as thumbs up, pointing, bird, okay, finger gun, peace sign, victory, and the letter 'O'. The class utilizes the MediaPipe Hands module for accurate hand landmark estimation.
 
-<img src="./docs/img/moving-hand.gif" style="width: 50%;">
+<img src="./docs/img/moving-hand.gif">
 
 ## Table of Contents
 
@@ -355,4 +355,4 @@ Each joint on the hand it represented in [the object's](#constructor) lmList lis
         ...]
 ```
 
-<img src="./docs/img/landmarked-hand.png" style="width: 50%;">
+<img src="./docs/img/landmarked-hand.png">
