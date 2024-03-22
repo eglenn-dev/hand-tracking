@@ -8,27 +8,27 @@ The `handTracker` class is a Python implementation for hand tracking using the M
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Methods](#methods)
-  - [Constructor](#constructor)
-  - [handsFinder](#handsFinder)
-  - [positionFinder](#positionFinder)
-  - [isThumbsUp](#isThumbsUp)
-  - [isPointingUp](#isPointingUp)
-  - [isBird](#isBird)
-  - [isOkay](#isOkay)
-  - [isFingerGun](#isFingerGun)
-  - [isPeace](#isPeace)
-  - [isVictory](#isVictory)
-  - [isO](#isO)
-  - [isAbove](#isAbove)
-  - [handOrientation](#handOrientation)
-  - [handDirection](#handDirection)
-  - [calculate_average_position](#calculate_average_position)
-  - [calculate_distance](#calculate_distance)
-  - [calculate_triangle_angles](#calculate_triangle_angles)
-- [Landmarks & Positions](#landmarks)
+-   [Installation](#installation)
+-   [Usage](#usage)
+-   [Methods](#methods)
+    -   [Constructor](#constructor)
+    -   [handsFinder](#handsFinder)
+    -   [positionFinder](#positionFinder)
+    -   [isThumbsUp](#isThumbsUp)
+    -   [isPointingUp](#isPointingUp)
+    -   [isBird](#isBird)
+    -   [isOkay](#isOkay)
+    -   [isFingerGun](#isFingerGun)
+    -   [isPeace](#isPeace)
+    -   [isVictory](#isVictory)
+    -   [isO](#isO)
+    -   [isAbove](#isAbove)
+    -   [handOrientation](#handOrientation)
+    -   [handDirection](#handDirection)
+    -   [calculate_average_position](#calculate_average_position)
+    -   [calculate_distance](#calculate_distance)
+    -   [calculate_triangle_angles](#calculate_triangle_angles)
+-   [Landmarks & Positions](#landmarks)
 
 ## Installation<a name="installation"></a>
 
@@ -42,7 +42,7 @@ pip install opencv-python mediapipe
 
 Here's a basic example of how to use the handTracker class:
 
-```{python}
+```python
 import cv2
 import mediapipe as mp
 from hand_tracker import handTracker
@@ -73,7 +73,7 @@ Please note that for many of these methods there are defaukt vlaues of none. Thi
 
 ### Constructor<a name="constructor"></a>
 
-```{python}
+```python
 def __init__(self, mode=False, maxHands=2, detectionCon=0.5, modelComplexity=1, trackCon=0.5, lmList=[]):
     """
     Initializes the handTracker object.
@@ -90,7 +90,7 @@ def __init__(self, mode=False, maxHands=2, detectionCon=0.5, modelComplexity=1, 
 
 ### handsFinder<a name="handsFinder"></a>
 
-```{python}
+```python
 def handsFinder(self, image, draw=True):
     """
     Detects hands in the given image and draws landmarks if draw is True.
@@ -106,7 +106,7 @@ def handsFinder(self, image, draw=True):
 
 ### positionFinder<a name="positionFinder"></a>
 
-```{python}
+```python
 def positionFinder(self, image, handNo=0):
     """
     Finds the positions of hand landmarks in the given image. Writes to object list.
@@ -122,7 +122,7 @@ def positionFinder(self, image, handNo=0):
 
 ### isThumbsUp<a name="isThumbsUp"></a>
 
-```{python}
+```python
 def isThumbsUp(self, lmList=None):
     """
     Checks if the hand gesture represents a thumbs-up.
@@ -137,7 +137,7 @@ def isThumbsUp(self, lmList=None):
 
 ### isPointingUp<a name="isPointingUp"></a>
 
-```{python}
+```python
 def isPointingUp(self, lmList=None):
     """
     Checks if the hand gesture represents pointing upwards.
@@ -152,7 +152,7 @@ def isPointingUp(self, lmList=None):
 
 ### isBird<a name="isBird"></a>
 
-```{python}
+```python
 def isBird(self, lmList=None):
     """
     Checks if the hand gesture represents a 'bird'.
@@ -167,7 +167,7 @@ def isBird(self, lmList=None):
 
 ### isOkay<a name="isOkay"></a>
 
-```{python}
+```python
 def isOkay(self, lmList=None):
     """
     Checks if the hand gesture represents an 'Okay' sign.
@@ -182,7 +182,7 @@ def isOkay(self, lmList=None):
 
 ### isFingerGun<a name="isFingerGun"></a>
 
-```{python}
+```python
 def isFingerGun(self, lmList=None):
     """
     Checks if the hand gesture represents a finger gun.
@@ -197,7 +197,7 @@ def isFingerGun(self, lmList=None):
 
 ### isPeace<a name="isPeace"></a>
 
-```{python}
+```python
 def isPeace(self, lmList=None):
     """
     Checks if the hand gesture represents a peace sign.
@@ -212,7 +212,7 @@ def isPeace(self, lmList=None):
 
 ### isVictory<a name="isVictory"></a>
 
-```{python}
+```python
 def isVictory(self, lmList=None):
     """
     Checks if the hand gesture represents a victory sign.
@@ -227,7 +227,7 @@ def isVictory(self, lmList=None):
 
 ### isO<a name="isO"></a>
 
-```{python}
+```python
 def isO(self, lmList=None):
     """
     Checks if the hand gesture represents the letter 'O'.
@@ -242,7 +242,7 @@ def isO(self, lmList=None):
 
 ### isAbove<a name="isAbove"></a>
 
-```{python}
+```python
 def isAbove(self, target, landmarks, lmList=None):
     """
     Checks if the specified landmarks are above the target landmark.
@@ -259,7 +259,7 @@ def isAbove(self, target, landmarks, lmList=None):
 
 ### handOrientation<a name="handOrientation"></a>
 
-```{python}
+```python
 def handOrientation(self, orientation, lmList=None):
     """
     Checks if the hand orientation is as specified (up or down).
@@ -275,7 +275,7 @@ def handOrientation(self, orientation, lmList=None):
 
 ### handDirection<a name="handDirection"></a>
 
-```{python}
+```python
 def handDirection(self, direction, lmList=None):
     """
     Checks if the hand direction is specified (left or right).
@@ -291,7 +291,7 @@ def handDirection(self, direction, lmList=None):
 
 ### calculate_average_position<a name="calculate_average_position"></a>
 
-```{python}
+```python
 def calculate_average_position(self, landmarks, lmList=None):
     """
     Calculates the average position of specified landmarks.
@@ -307,7 +307,7 @@ def calculate_average_position(self, landmarks, lmList=None):
 
 ### calculate_distance<a name="calculate_distance"></a>
 
-```{python}
+```python
 @staticmethod
 def calculate_distance(point1, point2):
     """
@@ -324,7 +324,7 @@ def calculate_distance(point1, point2):
 
 ### calculate_triangle_angles<a name="calculate_triangle_angles"></a>
 
-```{python}
+```python
 @staticmethod
 def calculate_triangle_angles(a, b, c):
     """
@@ -346,7 +346,7 @@ Each joint on the hand it represented in [the object's](#constructor) lmList lis
 
 #### Example data:
 
-```{python}
+```python
     # [int landmark number, int x-position, int y-position]
     lmList1 = [
         [0, 354, 485],
